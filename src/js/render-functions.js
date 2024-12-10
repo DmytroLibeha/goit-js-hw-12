@@ -14,9 +14,9 @@ export default function createMarkup(arr) {
     <img src="${webformatURL}" alt="${tags}" class="img-item">
     <div class="list-container">
     <p class="item"><span class="item-text">Likes</span> <span>${likes}</span></p>
-    <p class="item"><span class="item-text">Wiews</span> <span>${views}</span></p>
+    <p class="item"><span class="item-text">Views</span> <span>${views}</span></p>
     <p class="item"><span class="item-text">Comments</span> <span>${comments}</span></p>
-    <p class="item"><span class="item-text">Downlods</span> <span>${downloads}</span></p>
+    <p class="item"><span class="item-text">Downloads</span> <span>${downloads}</span></p>
     </div></a>
   </li>`
     )

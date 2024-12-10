@@ -30,11 +30,11 @@ function toSabmit(evt) {
   if (!value || value === ' ') {
     {
       iziToast.show({
-        title: ':(',
+        title: 'Error',
         message: 'Please add request!',
         position: 'center',
       });
-      list.innerHTML = ':(';
+      list.innerHTML = '';
       return;
     }
   }
@@ -91,7 +91,7 @@ async function onLoadMore() {
     if (page >= totalPage || !totalHits) {
       loadBtn.classList.replace('more-btn', 'hidden');
       iziToast.show({
-        title: 'X',
+        title: 'No Results',
         message: 'Sorry, there are no more images matching your request.',
         position: 'center',
       });
