@@ -91,7 +91,7 @@ async function onLoadMore() {
     if (page >= totalPage || !totalHits) {
       loadBtn.classList.replace('more-btn', 'hidden');
       iziToast.show({
-        title: 'No Results',
+        title: 'End of results',
         message: 'Sorry, there are no more images matching your request.',
         position: 'center',
       });
