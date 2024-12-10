@@ -46,7 +46,6 @@ function toSabmit(evt) {
   getPictures(value, page)
     .then(({ data: { hits, totalHits } }) => {
       totalPage = Math.ceil(totalHits / hits.length);
-      console.log(page);
 
       if (!hits.length) {
         iziToast.show({
@@ -105,7 +104,6 @@ async function onLoadMore() {
     });
     litebox.refresh();
   } catch (error) {
-    console.log(error.message);
     iziToast.show({
       title: 'Error',
       message: `Something went wrong: ${error.message}. Please try again later.`,
