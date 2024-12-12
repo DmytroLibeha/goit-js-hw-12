@@ -19,22 +19,22 @@ form.addEventListener('submit', toSabmit);
 loadBtn.addEventListener('click', onLoadMore);
 let page = 1;
 let totalPage = 1;
+let currentSearch = '';
 
 function toSabmit(evt) {
   evt.preventDefault();
 
   const { picture } = evt.target.elements;
-  const value = picture.value.trim();
+  currentSearch = picture.value.trim();
 
   list.innerHTML = '';
-  if (!value || value === ' ') {
+  if (!currentSearch) {
     {
       iziToast.show({
         title: 'Error',
         message: 'Please add request!',
         position: 'center',
       });
-      list.innerHTML = '';
       return;
     }
   }
@@ -43,9 +43,9 @@ function toSabmit(evt) {
 
   loader.classList.remove('hidden');
   loadBtn.classList.replace('more-btn', 'hidden');
-  getPictures(value, page)
+  getPictures(currentSearch, page)
     .then(({ data: { hits, totalHits } }) => {
-      totalPage = Math.ceil(totalHits / hits.length);
+      totalPage = Math.ceil(totalHits / 15);
 
       if (!hits.length) {
         iziToast.show({
@@ -53,17 +53,22 @@ function toSabmit(evt) {
           message: 'Please enter a valid search query!',
           position: 'center',
         });
+        return;
+      }
+      list.innerHTML = createMarkup(hits);
+      litebox.refresh();
+      if (totalPage === 1) {
+        iziToast.show({
+          title: 'End of Results',
+          message: 'No more images found for your query.',
+          position: 'center',
+        });
+        loadBtn.classList.replace('more-btn', 'hidden');
       } else {
-        list.innerHTML = createMarkup(hits);
-        litebox.refresh();
-        if (page >= totalPage) {
-          loadBtn.classList.replace('more-btn', 'hidden');
-        }
         loadBtn.classList.replace('hidden', 'more-btn');
       }
     })
     .catch(error => {
-      console.log(error.message);
       iziToast.show({
         title: 'Error',
         message: `Something went wrong: ${error.message}. Please try again later.`,
@@ -77,15 +82,15 @@ function toSabmit(evt) {
 }
 async function onLoadMore() {
   page += 1;
-
   loadBtn.disabled = true;
+  loader.classList.remove('hidden');
   try {
     const {
       data: { hits, totalHits },
-    } = await getPictures(page);
+    } = await getPictures(currentSearch, page);
 
     list.insertAdjacentHTML('beforeend', createMarkup(hits));
-    totalPage = Math.ceil(totalHits / hits.length);
+    litebox.refresh();
 
     if (page >= totalPage || !totalHits) {
       loadBtn.classList.replace('more-btn', 'hidden');
@@ -102,7 +107,6 @@ async function onLoadMore() {
       top: itemHeight * 2.5,
       behavior: 'smooth',
     });
-    litebox.refresh();
   } catch (error) {
     iziToast.show({
       title: 'Error',
@@ -110,6 +114,7 @@ async function onLoadMore() {
       position: 'center',
     });
   } finally {
+    loader.classList.add('hidden');
     loadBtn.disabled = false;
   }
 }
